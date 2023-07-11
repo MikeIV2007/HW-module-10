@@ -4,6 +4,7 @@ from rich.table import Table
 
 from collections import UserDict
 
+I = 1
 
 #Клас Field, який буде батьківським для всіх полів, у ньому потім реалізуємо логіку, загальну для всіх полів.
 class Field:
@@ -48,25 +49,12 @@ class AddressBook(UserDict):
             print ('\nAddress Book is empty!')
             return main()
         for name, phone_number in self.data.items():
-            #print(f"{name.name}: {phone_number.phone}")
             table.add_row(name.name, phone_number.phone)
         print (table)
         return main()
 
 address_book = AddressBook()
-    
 
-    # def add(self,record):
-
-    #     record_name = record.name
-    #     record_phone = record.phone
-        
-    #     print (f'\nNew contat {record_name.name} {record_phone.phone} added successfully!')
-    #     #print (f'AB {record.name}, {record.phone}')
-    #     self.data[record_name.name] = record_phone.phone
-
-# USER_DATA_DICTIONARY = {}
-# I = 1
 
 def table_of_commands():
 
@@ -89,12 +77,6 @@ def table_of_commands():
 def user_name_exists(func):
     def wrapper(user_name: str, phone_number: str):
 
-        # if name.name == user_name:
-        #     print (f'\nContat {name.name} is already exist! Try other options!')
-        #     return main()
-
-        #if user_name != address_book[name.name]
-
         for name, phone  in address_book.data.items():
             if user_name == name.name:
                 func(user_name, phone_number)
@@ -111,7 +93,6 @@ def hello():
 
 
 def exit_programm():
-
     print ('\nGood bye! Have a nice day!\n')
     exit()
 
@@ -132,16 +113,6 @@ def add(user_name, phone_number):
     address_book.add_record(rec)
     print (f'\nNew contat {user_name} {phone_number} added successfully!')
     return main()
-    # if user_name in USER_DATA_DICTIONARY:
-    #     print (f'\nContat {user_name} is already exist! Try other options!')
-    #     main()
-    # if phone == '':
-    #     print ('There is no phone number')
-    #     return main
-    # USER_DATA_DICTIONARY[user_name] = phone_number
-    # print (f'\nNew contat {user_name} {phone_number} added successfully!')
-    # save_data()
-    # return main()
 
 
 @user_name_exists
@@ -154,37 +125,17 @@ def change(user_name: str, phone_number:str):
             return main()
 
 
-# @user_name_exists
-# def phone(user_name:str, phone_number: str):
-#     phone_number = USER_DATA_DICTIONARY[user_name]
-#     print (f'\nPhone number of {user_name} is: {phone_number}')
-#     return main()
+@user_name_exists
+def phone(user_name:str, phone_number: str):
+    for name, phone in address_book.data.items():
+        if name.name == user_name:
+            phone_number = phone.phone
+    print (f'\nPhone number of {name.name} is: {phone.phone}')
+    return main()
 
 
 def show_all():
     address_book.display_contacts()
-#     try:
-#         with open('contacts_log.txt', 'r') as file:
-#             list = file.readlines()
-
-#         if list == []:
-#             print ('\nDatabase is empty!')
-#             return main()
-        
-#         else:
-#             table = Table(title="\nALL CONTACTS IN DATABASE")
-#             table.add_column("Name", justify="left")
-#             table.add_column("Phone number", justify="center")
-
-#             for item in list:
-#                 item_split =item.split(':')
-#                 table.add_row(item_split[0], item_split[1].replace('\n', ''))
-#         print (table)
-#         return main()
-    
-    # except FileNotFoundError:
-    #     print ('\nDatabase is empty!')
-    #     return main()
     
 
 COMMAND_INPUT = {'hello': hello, 
@@ -194,15 +145,12 @@ COMMAND_INPUT = {'hello': hello,
                 'good bye': exit_programm, 
                 'close': exit_programm,
                 'help': table_of_commands,
-                'change': change}  
-                #  'phone': phone,
+                'change': change,  
+                'phone': phone}
 
 
 def execute_command(command, user_name, phone_number):
     COMMAND_INPUT[command](user_name, phone_number)
-    # if command == 'add':
-       
-    #     record.add()
 
 
 def input_error(func):
@@ -316,10 +264,6 @@ def get_user_input():
 
         return user_input
     
-
-# user_name = Name()
-# user_phone = Phone()
-# record = Record (user_name, user_phone)
 
 def main():
     #load_data()
