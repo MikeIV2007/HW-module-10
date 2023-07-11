@@ -88,11 +88,20 @@ def table_of_commands():
 
 def user_name_exists(func):
     def wrapper(user_name: str, phone_number: str):
-        if user_name not in USER_DATA_DICTIONARY:
-            print (f'\nContact {user_name} is not exist! Try other options!')
-            main()
-        else:
-            func(user_name, phone_number)
+
+        # if name.name == user_name:
+        #     print (f'\nContat {name.name} is already exist! Try other options!')
+        #     return main()
+
+        #if user_name != address_book[name.name]
+
+        for name, phone  in address_book.data.items():
+            if user_name == name.name:
+                func(user_name, phone_number)
+
+        print (f'\nContact {user_name} is not exist! Try other options!')
+        return main()
+  
     return wrapper
 
 
@@ -108,12 +117,7 @@ def exit_programm():
 
 
 def add(user_name, phone_number):
-    # if user_name in address_book:
-    #     print (f'\nContat {user_name} is already exist! Try other options!')
-    #     main()
-    # if phone_number == '':
-    #     print ('There is no phone number')
-    #     return main()
+
     name = Name(user_name)
     phone = Phone(phone_number)
     rec = Record(name, phone)
@@ -140,12 +144,14 @@ def add(user_name, phone_number):
     # return main()
 
 
-# @user_name_exists
-# def change(user_name: str, phone_number:str):
-#     USER_DATA_DICTIONARY[user_name] = phone_number
-#     save_data()
-#     print (f'\nPhone number {phone_number} for {user_name} changed successfully!')
-#     return main()
+@user_name_exists
+def change(user_name: str, phone_number:str):
+    for name, phone in address_book.data.items():
+        if name.name == user_name:
+            phone = Phone (phone_number)
+            address_book[name] = phone
+            print (f'\nPhone number {phone.phone} for {name.name} changed successfully!')
+            return main()
 
 
 # @user_name_exists
@@ -187,8 +193,8 @@ COMMAND_INPUT = {'hello': hello,
                 'exit': exit_programm,
                 'good bye': exit_programm, 
                 'close': exit_programm,
-                'help': table_of_commands} 
-                #  'change': change, 
+                'help': table_of_commands,
+                'change': change}  
                 #  'phone': phone,
 
 
