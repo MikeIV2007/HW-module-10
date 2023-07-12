@@ -43,7 +43,7 @@ class AddressBook(UserDict):
     def display_contacts(self):
         table = Table(title="\nALL CONTACTS IN DATABASE")
         table.add_column("Name", justify="left")
-        table.add_column("Phone number", justify="center")
+        table.add_column("Phone number", justify="left")
 
         if len(self.data) == 0:
             print ('\nAddress Book is empty!')
@@ -70,7 +70,7 @@ def table_of_commands():
     table.add_column("DESCRIPTION", justify="left")
     table.add_row('hello', '-', '-', 'Greeting')
     table.add_row('add', 'Any name ', 'Phone number in any format', 'Add new contact')
-    table.add_row('change', 'Existing name', 'New phone number', 'Change phone number')
+    table.add_row('delete', 'Existing name', 'Phone to delete', 'Delete phone number')
     table.add_row('phone', 'Existing name', '-', 'Getting phone number')
     table.add_row('show all', '-', '-', 'Getting all database')
     table.add_row('good bye / close / exit', '-', '-', 'Exit')
@@ -122,13 +122,17 @@ def add(user_name, phone_number):
 
 
 @user_name_exists
-def change(user_name: str, phone_number:str):
-    for name, phone in address_book.data.items():
+def delete(user_name: str, phone_number:str):
+    for name, phones in address_book.data.items():
         if name.name == user_name:
-            phone = Phone (phone_number)
-            address_book[name] = phone
-            print (f'\nPhone number {phone.phone} for {name.name} changed successfully!')
-            return main()
+            for item in phones:
+                if phone_number == item.phone:
+                    phones.remove(item)
+                    print (f'\nPhone number {item.phone} for {name.name} removed successfully!')
+                    return main()
+                else:
+                    print (f'Phone {phone_number} for {user_name} was not found!')
+                    return main
 
 
 @user_name_exists
@@ -149,7 +153,7 @@ def append(user_name:str, phone_number: str):
             additional_phone = Phone(phone_number)
             phones.append(additional_phone)
 
-    print (f'\nAddisional phone number {phone_number} for {name.name} saved successfully')
+    print (f'\nAdditional phone number {phone_number} for {name.name} saved successfully')
     return main()
 
 def show_all():
@@ -163,7 +167,7 @@ COMMAND_INPUT = {'hello': hello,
                 'good bye': exit_programm, 
                 'close': exit_programm,
                 'help': table_of_commands,
-                'change': change,  
+                'delete': delete,  
                 'phone': phone,
                 'append': append}
 
@@ -299,14 +303,16 @@ if __name__ == "__main__":
 #
 # 
 # ADD Bill +380(67)333-43-54
-# APPeND Bill +380(67)333-11-11
+# Append Bill +380(67)333-11-11
+# DeLete Bill +380(67)333-43-54
 # ADD Bill Jonson +380(67)333-43-5
-# Append Bill Jonson +380(67)333-43-5
+# Append Bill Jonson +380(67)333-99-88
+# DeleTe Bill Jonson +380(67)333-43-5
 # +380(67)282-8-313
 # CHange Mike Jonn +380(67)111-41-77
+# delete Mike Jonn +380(67)111-41-77
 # PHONE Mike Jonn +380(67)111-41-77
 # CHange Bill Jonson +380(67)111-41-77
-# CHANGE Bill +380(67)454-12-12
 # PHONE Bill
 # phone Bill +380(67)333-43-54
 # 12m3m4n
