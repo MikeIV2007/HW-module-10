@@ -137,11 +137,13 @@ def delete(user_name: str, phone_number:str):
 
 @user_name_exists
 def phone(user_name:str, phone_number: str):
-    for name, phone in address_book.data.items():
+    for name, phones in address_book.data.items():
         if name.name == user_name:
-            phone_number = phone.phone
-    print (f'\nPhone number of {name.name} is: {phone.phone}')
-    return main()
+            phones_str = ''
+            for item in phones:
+                phones_str += item.phone + ' '
+            print (f'\nPhone number of {name.name} is: {phones_str}')
+            return main()
 
 
 @user_name_exists
@@ -266,9 +268,9 @@ def get_user_input():
 
     global I
     
-    # if I == 1:
-    #     table_of_commands()
-    #     I += 1
+    if I == 1:
+        table_of_commands()
+        I += 1
 
     while True:
         user_input = (input(f'\nEnter command, please!\n\n>>>')).strip()
@@ -300,13 +302,14 @@ def main():
 if __name__ == "__main__":
     main()
 
-#
 # 
 # ADD Bill +380(67)333-43-54
 # Append Bill +380(67)333-11-11
+# phone Bill
 # DeLete Bill +380(67)333-43-54
 # ADD Bill Jonson +380(67)333-43-5
 # Append Bill Jonson +380(67)333-99-88
+# PhoNE Bill Jonson
 # DeleTe Bill Jonson +380(67)333-43-5
 # +380(67)282-8-313
 # CHange Mike Jonn +380(67)111-41-77
@@ -320,10 +323,13 @@ if __name__ == "__main__":
 # ADD Jill Bonson +380(67)333-43-54
 # PhOnE Jill Bonson +380(67)333-43-54
 # ADD Jill +380(67)333-43-54
-# change Jill +380(67)222-33-55
+# append Jill +380(67)222-44-55
 # Иванов Иван Иванович +380(67)222-33-55
-# change Иванов Иван Иванович +380(67)999-1-777
+# append Иванов Иван Иванович +380(67)999-1-777
 # phone Иванов Иван Иванович 
+# delete Иванов Иван Иванович +380(67)222-33-55
 # dfsadfads asdgfas ref asdf     TypeError
 # Jgfdksaflf Sdfjldsf; Asdfk;;lsdff Jldsf;sf';; sdff ; jldsf;sF';;
-# add phone mike 123123-12-3
+# add mike 123123-12-3
+# delete mike 123123-12-3
+# phone mike 123123-12-3
