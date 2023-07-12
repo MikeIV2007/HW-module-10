@@ -30,9 +30,9 @@ class Record(Field):
         #Record зберігає об'єкт Name в окремому атрибуті
         self.name = name
         #Record зберігає список об'єктів Phone в окремому атрибуті.
-        #self.phones = []
+        self.phones = []
         self.phone = phone
-        #self.phones.append(self.phone)
+        self.phones.append(self.phone)
 
 #AddressBook реалізує метод add_record, який додає Record у self.data.
 class AddressBook(UserDict):
@@ -65,11 +65,12 @@ def table_of_commands():
     table.add_column("DESCRIPTION", justify="left")
     table.add_row('hello', '-', '-', 'Greeting')
     table.add_row('add', 'Any name ', 'Phone number in any format', 'Add new contact')
-    table.add_row('change', 'Any name', 'Phone number in any format', 'Change phone number')
-    table.add_row('phone', 'Any name', '-', 'Getting phone number')
+    table.add_row('change', 'Existing name', 'New phone number', 'Change phone number')
+    table.add_row('phone', 'Existing name', '-', 'Getting phone number')
     table.add_row('show all', '-', '-', 'Getting all database')
     table.add_row('good bye / close / exit', '-', '-', 'Exit')
-    table.add_row('help', '-', '-', 'Printing table of commands') 
+    table.add_row('help', '-', '-', 'Printing table of commands')
+    table.add_row('Append', 'Existing name', 'Additional phone number', 'Append phone number') 
 
     return print (table)
 
@@ -134,6 +135,14 @@ def phone(user_name:str, phone_number: str):
     return main()
 
 
+@user_name_exists
+def append(user_name:str, phone_number: str):
+    for name, phone in address_book.data.items():
+        if name.name == user_name:
+            phone_number = phone.phone
+    print (f'\nPhone number of {name.name} is: {phone.phone}')
+    return main()
+
 def show_all():
     address_book.display_contacts()
     
@@ -146,7 +155,8 @@ COMMAND_INPUT = {'hello': hello,
                 'close': exit_programm,
                 'help': table_of_commands,
                 'change': change,  
-                'phone': phone}
+                'phone': phone,
+                'add phone': append}
 
 
 def execute_command(command, user_name, phone_number):
@@ -299,4 +309,4 @@ if __name__ == "__main__":
 # phone Иванов Иван Иванович 
 # dfsadfads asdgfas ref asdf     TypeError
 # Jgfdksaflf Sdfjldsf; Asdfk;;lsdff Jldsf;sf';; sdff ; jldsf;sF';;
-# add mike 123123-12-3
+# add phone mike 123123-12-3
