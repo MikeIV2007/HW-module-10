@@ -38,7 +38,7 @@ class Record(Field):
 class AddressBook(UserDict):
     def add_record(self, rec):
     #def add(self, name, phone_number):
-        self.data[rec.name] = rec.phone
+        self.data[rec.name] = rec.phones
 
     def display_contacts(self):
         table = Table(title="\nALL CONTACTS IN DATABASE")
@@ -48,8 +48,13 @@ class AddressBook(UserDict):
         if len(self.data) == 0:
             print ('\nAddress Book is empty!')
             return main()
-        for name, phone_number in self.data.items():
-            table.add_row(name.name, phone_number.phone)
+        
+        for name, phone_numbers in self.data.items():
+            phones_str = ''
+            for item in phone_numbers:
+                phones_str += item.phone + ' '
+
+            table.add_row(name.name, phones_str.strip())
         print (table)
         return main()
 
@@ -137,10 +142,14 @@ def phone(user_name:str, phone_number: str):
 
 @user_name_exists
 def append(user_name:str, phone_number: str):
-    for name, phone in address_book.data.items():
+
+    for name, phones in address_book.data.items():
+
         if name.name == user_name:
-            phone_number = phone.phone
-    print (f'\nPhone number of {name.name} is: {phone.phone}')
+            additional_phone = Phone(phone_number)
+            phones.append(additional_phone)
+
+    print (f'\nAddisional phone number {phone_number} for {name.name} saved successfully')
     return main()
 
 def show_all():
@@ -156,7 +165,7 @@ COMMAND_INPUT = {'hello': hello,
                 'help': table_of_commands,
                 'change': change,  
                 'phone': phone,
-                'add phone': append}
+                'append': append}
 
 
 def execute_command(command, user_name, phone_number):
@@ -290,7 +299,9 @@ if __name__ == "__main__":
 #
 # 
 # ADD Bill +380(67)333-43-54
+# APPeND Bill +380(67)333-11-11
 # ADD Bill Jonson +380(67)333-43-5
+# Append Bill Jonson +380(67)333-43-5
 # +380(67)282-8-313
 # CHange Mike Jonn +380(67)111-41-77
 # PHONE Mike Jonn +380(67)111-41-77
