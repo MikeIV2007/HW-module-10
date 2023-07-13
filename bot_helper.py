@@ -1,7 +1,3 @@
-"""Вітаю.
-В класі Record існують два поля для телоіонів?) Який сенс?)
-Також в класі Record мають бути методи роботи саме з полями record (зміна номеру, додавання номеру ...)"""
-
 import re
 from rich import print
 from rich.table import Table
@@ -10,34 +6,27 @@ from collections import UserDict
 
 I = 1
 
-#Клас Field, який буде батьківським для всіх полів, у ньому потім реалізуємо логіку, загальну для всіх полів.
 class Field:
     pass
 
-#Клас Name, обов'язкове поле з ім'ям.
+
 class Name(Field):
     def __init__(self, name) -> None:
         self.name = name
 
 
-#Клас Phone, необов'язкове поле з телефоном та таких один запис (Record) може містити кілька.
 class Phone(Field):
     def __init__(self, phone):
         self.phone = phone
 
 
-#Клас Record, який відповідає за логіку додавання/видалення/редагування необов'язкових полів та зберігання обов'язкового поля Name.
-#Записи Record в AddressBook зберігаються як значення у словнику. Як ключі використовується значення Record.name.value.
 class Record(Field):
     def __init__(self, name, phone):
-        #Record зберігає об'єкт Name в окремому атрибуті
         self.name = name
-        #Record зберігає список об'єктів Phone в окремому атрибуті.
         self.phones = []
         self.phone = phone
         self.phones.append(self.phone)
-
-           
+      
     def add_record(self):
         address_book.data[self.name] = self.phones
     
@@ -47,18 +36,14 @@ class Record(Field):
         address_book.data[self.name] = phones_list
 
     def delete_phone(self):
-        print (self.name.name)
-        print (self.phone)
         phones_list = address_book.data[self.name]
-        print (phones_list)
         phones_list.remove(self.phone)
         address_book.data[self.name] = phones_list 
 
-#AddressBook реалізує метод add_record, який додає Record у self.data.
+
 class AddressBook(UserDict):
 
     def display_contacts(self):
-       #print (self.data)
 
         table = Table(title="\nALL CONTACTS IN DATABASE")
         table.add_column("Name", justify="left")
@@ -69,9 +54,6 @@ class AddressBook(UserDict):
             return main()
         
         for name, phone_numbers in self.data.items():
-            #print (f"new phone list {phone_numbers}")
-            #print (f"name: {name}")
-            #print (address_book.data[self.name])
             phones_str = ''
             for item in phone_numbers:
                 phones_str += item.phone + ' '
@@ -92,17 +74,18 @@ def table_of_commands():
     table.add_column("DESCRIPTION", justify="left")
     table.add_row('hello', '-', '-', 'Greeting')
     table.add_row('add', 'Any name ', 'Phone number in any format', 'Add new contact')
+    table.add_row('Append', 'Existing name', 'Additional phone number', 'Append phone number') 
     table.add_row('delete', 'Existing name', 'Phone to delete', 'Delete phone number')
     table.add_row('phone', 'Existing name', '-', 'Getting phone number')
     table.add_row('show all', '-', '-', 'Getting all database')
     table.add_row('good bye / close / exit', '-', '-', 'Exit')
     table.add_row('help', '-', '-', 'Printing table of commands')
-    table.add_row('Append', 'Existing name', 'Additional phone number', 'Append phone number') 
 
     return print (table)
 
 
 def user_name_exists(func):
+    
     def wrapper(user_name: str, phone_number: str):
 
         for name, phone  in address_book.data.items():
@@ -250,7 +233,7 @@ def get_user_name(command: str, user_info: str )-> tuple:
     for i in user_input_split:
         match_name = re.match(regex_name, i)
         if match_name:
-            if len(match_name.group()) == len(i): # checking if there are no other symbols than letters
+            if len(match_name.group()) == len(i):
                 name_list.append(i.capitalize())
                 user_info = user_info[match_name.span()[1]:].strip()
                 phone = user_info
@@ -291,9 +274,9 @@ def get_user_input():
 
     global I
     
-    # if I == 1:
-    #     table_of_commands()
-    #     I += 1
+    if I == 1:
+        table_of_commands()
+        I += 1
 
     while True:
         user_input = (input(f'\nEnter command, please!\n\n>>>')).strip()
