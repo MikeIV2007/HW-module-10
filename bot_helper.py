@@ -23,11 +23,11 @@ class Phone(Field):
 class Record(Field):
     def __init__(self, name, phone):
         self.name = name
-        self.phones = []
         self.phone = phone
-        self.phones.append(self.phone)
       
     def add_record(self):
+        self.phones = []
+        self.phones.append(self.phone)
         address_book.data[self.name] = self.phones
     
     def add_phone(self):
@@ -74,7 +74,7 @@ def table_of_commands():
     table.add_column("DESCRIPTION", justify="left")
     table.add_row('hello', '-', '-', 'Greeting')
     table.add_row('add', 'Any name ', 'Phone number in any format', 'Add new contact')
-    table.add_row('Append', 'Existing name', 'Additional phone number', 'Append phone number') 
+    table.add_row('append', 'Existing name', 'Additional phone number', 'Append phone number') 
     table.add_row('delete', 'Existing name', 'Phone to delete', 'Delete phone number')
     table.add_row('phone', 'Existing name', '-', 'Getting phone number')
     table.add_row('show all', '-', '-', 'Getting all database')
@@ -85,7 +85,7 @@ def table_of_commands():
 
 
 def user_name_exists(func):
-    
+
     def wrapper(user_name: str, phone_number: str):
 
         for name, phone  in address_book.data.items():
