@@ -1,3 +1,7 @@
+"""Вітаю.
+В класі Record існують два поля для телоіонів?) Який сенс?)
+Також в класі Record мають бути методи роботи саме з полями record (зміна номеру, додавання номеру ...)"""
+
 import re
 from rich import print
 from rich.table import Table
@@ -26,7 +30,6 @@ class Phone(Field):
 #Записи Record в AddressBook зберігаються як значення у словнику. Як ключі використовується значення Record.name.value.
 class Record(Field):
     def __init__(self, name, phone):
-
         #Record зберігає об'єкт Name в окремому атрибуті
         self.name = name
         #Record зберігає список об'єктів Phone в окремому атрибуті.
@@ -34,13 +37,29 @@ class Record(Field):
         self.phone = phone
         self.phones.append(self.phone)
 
+           
+    def add_record(self):
+        address_book.data[self.name] = self.phones
+    
+    def add_phone(self):
+        phones_list = address_book.data[self.name]
+        phones_list.append(self.phone)
+        address_book.data[self.name] = phones_list
+
+    def delete_phone(self):
+        print (self.name.name)
+        print (self.phone)
+        phones_list = address_book.data[self.name]
+        print (phones_list)
+        phones_list.remove(self.phone)
+        address_book.data[self.name] = phones_list 
+
 #AddressBook реалізує метод add_record, який додає Record у self.data.
 class AddressBook(UserDict):
-    def add_record(self, rec):
-    #def add(self, name, phone_number):
-        self.data[rec.name] = rec.phones
 
     def display_contacts(self):
+       #print (self.data)
+
         table = Table(title="\nALL CONTACTS IN DATABASE")
         table.add_column("Name", justify="left")
         table.add_column("Phone number", justify="left")
@@ -50,6 +69,9 @@ class AddressBook(UserDict):
             return main()
         
         for name, phone_numbers in self.data.items():
+            #print (f"new phone list {phone_numbers}")
+            #print (f"name: {name}")
+            #print (address_book.data[self.name])
             phones_str = ''
             for item in phone_numbers:
                 phones_str += item.phone + ' '
@@ -107,7 +129,7 @@ def add(user_name, phone_number):
 
     name = Name(user_name)
     phone = Phone(phone_number)
-    rec = Record(name, phone)
+    record = Record(name, phone)
 
     for name, phone in address_book.data.items():
         if name.name == user_name:
@@ -116,10 +138,9 @@ def add(user_name, phone_number):
     if phone_number == '':
         print ('There is no phone number')
         return main()
-    address_book.add_record(rec)
+    record.add_record()
     print (f'\nNew contat {user_name} {phone_number} added successfully!')
     return main()
-
 
 @user_name_exists
 def delete(user_name: str, phone_number:str):
@@ -127,7 +148,8 @@ def delete(user_name: str, phone_number:str):
         if name.name == user_name:
             for item in phones:
                 if phone_number == item.phone:
-                    phones.remove(item)
+                    delete_record = Record (name, item)
+                    delete_record.delete_phone()
                     print (f'\nPhone number {item.phone} for {name.name} removed successfully!')
                     return main()
                 else:
@@ -153,8 +175,9 @@ def append(user_name:str, phone_number: str):
 
         if name.name == user_name:
             additional_phone = Phone(phone_number)
-            phones.append(additional_phone)
-
+            additional_record = Record (name, additional_phone )
+            additional_record.add_phone()
+    
     print (f'\nAdditional phone number {phone_number} for {name.name} saved successfully')
     return main()
 
@@ -268,9 +291,9 @@ def get_user_input():
 
     global I
     
-    if I == 1:
-        table_of_commands()
-        I += 1
+    # if I == 1:
+    #     table_of_commands()
+    #     I += 1
 
     while True:
         user_input = (input(f'\nEnter command, please!\n\n>>>')).strip()
@@ -291,7 +314,7 @@ def get_user_input():
     
 
 def main():
-    #load_data()
+
     user_input = get_user_input()
     command, user_info = identify_command_get_info(user_input )
     name, phone = get_user_name(command, user_info)
