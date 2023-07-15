@@ -68,30 +68,27 @@ def unknown_command(*args):
 
 def show_all_command(*args):
 
-    # table = Table(title="\nALL CONTACTS IN DATABASE")
-    # table.add_column("Name", justify="left")
-    # table.add_column("Phone number", justify="left")
+    table = Table(title="\nALL CONTACTS IN DATABASE")
+    table.add_column("Name", justify="left")
+    table.add_column("Phone number", justify="left")
 
-    # if len(address_book.data) == 0:
-    #     print ('\nAddress Book is empty!')
-    #     return main()
+    if len(address_book.data) == 0:
+        return '\nAddress Book is empty!'
     
-    # # for name, phone_numbers in self.data.items():
-    # #     phones_str = ''
-    # #     for item in phone_numbers:
-    # #         phones_str += item.phone + ' '
+    for name, record in address_book.data.items():
+        phones_str = ''
+        user_name = record.name
+        user_phones_list = record.phones
+        for item in user_phones_list:
+            phones_str += item.value + ' '
 
-    #     table.add_row(name.name, phones_str.strip())
-    # print (table)
-    # #return main()
-    return str(address_book)
-
-
+        table.add_row(user_name.value, phones_str.strip())
+    return table
 
 COMMANDS = {
-    add_command: ("add", "+"),
+    add_command: ("add", "append"),
     change_command: ("change", "зміни"),
-    exit_command: ("bye", "exit", "end"),
+    exit_command: ("good bye", "close", "exit"),
     show_all_command: ("show all", )
 }
 
