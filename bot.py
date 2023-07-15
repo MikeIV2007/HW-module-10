@@ -7,11 +7,11 @@ address_book = AddressBook()
 
 def table_of_commands():
 
-    table = Table(title="\nALL VALID COMMANDS:\n(All entered data must be devided by gap!)")
-    table.add_column("COMMAND", justify="left")
-    table.add_column("NAME", justify="left")
-    table.add_column("PHONE NUMBER", justify="center")
-    table.add_column("DESCRIPTION", justify="left")
+    table = Table(title='\nALL VALID COMMANDS:\n(All entered data must be devided by gap!)')
+    table.add_column('COMMAND', justify='left')
+    table.add_column('NAME', justify='left')
+    table.add_column('PHONE NUMBER', justify='center')
+    table.add_column('DESCRIPTION', justify='left')
     table.add_row('hello', '-', '-', 'Greeting')
     table.add_row('add', 'Any name ', 'Phone number in any format', 'Add new contact')
     table.add_row('append', 'Existing name', 'Additional phone number', 'Append phone number') 
@@ -40,9 +40,6 @@ def add_command(*args):
     rec: Record = address_book.get(str(name))
 
     if rec:
-        # print (rec)
-        # print (rec.name)
-        # print (rec.phones)
         return rec.add_phone(phone)
     rec = Record(name, phone)
     return address_book.add_record(rec)
@@ -55,11 +52,11 @@ def change_command(*args):
     rec: Record = address_book.get(str(name))
     if rec:
         return rec.change_phone(old_phone, new_phone)
-    return f"No contact {name} in address book"
+    return f'No contact {name} in address book'
 
 
 def exit_command(*args):
-    return "Bye"
+    return '\nGood bye! Have a nice day!\n'
 
 
 def unknown_command(*args):
@@ -68,8 +65,8 @@ def unknown_command(*args):
 
 def show_all_command(*args):
 
-    table = Table(title="\nALL CONTACTS IN DATABASE")
-    table.add_column("Name", justify="left")
+    table = Table(title='\nALL CONTACTS IN DATABASE')
+    table.add_column('Name', justify='left')
     table.add_column("Phone number", justify="left")
 
     if len(address_book.data) == 0:
@@ -80,16 +77,16 @@ def show_all_command(*args):
         user_name = record.name
         user_phones_list = record.phones
         for item in user_phones_list:
-            phones_str += item.value + ' '
+            phones_str += item.value + ', '
 
         table.add_row(user_name.value, phones_str.strip())
     return table
 
 COMMANDS = {
-    add_command: ("add", "append"),
-    change_command: ("change", "зміни"),
-    exit_command: ("good bye", "close", "exit"),
-    show_all_command: ("show all", )
+    add_command: ('add', 'append'),
+    change_command: ('change', 'зміни'),
+    exit_command: ('good bye', 'close', 'exit'),
+    show_all_command: ('show all', )
 }
 
 
