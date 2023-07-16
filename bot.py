@@ -45,22 +45,64 @@ def add_command(*args):
     return address_book.add_record(rec)
 
 
-def change_command(*args):
+# def change_command(*args):
+#     name = Name(args[0])
+#     old_phone = Phone(args[1])
+#     new_phone = Phone(args[2])
+#     rec: Record = address_book.get(str(name))
+#     if rec:
+#         return rec.change_phone(old_phone, new_phone)
+#     return f'No contact {name} in address book'
+
+def delete_phone_command(*args):
     name = Name(args[0])
-    old_phone = Phone(args[1])
-    new_phone = Phone(args[2])
-    rec: Record = address_book.get(str(name))
-    if rec:
-        return rec.change_phone(old_phone, new_phone)
-    return f'No contact {name} in address book'
+    phone_to_delete = Phone (args[1])
+    record: Record = address_book.get(str(name))
+    if record:
+        return record.delete_pone(phone_to_delete)
+    return f'\nContact {name} in address book is not found!'
+
+
+def phone_command(*args):
+    for name, record in address_book.data.items():
+        if name == args[0]:
+            phones = ", ".join(str(phone) for phone in record.phones)
+            return (f'\nPhone number(s) of {name} is: {phones}')
+    return f'\nContact {name} in address book is not found!'
+
+
+# def delete(user_name: str, phone_number:str):
+#     for name, phones in address_book.data.items():
+#         if name.name == user_name:
+#             for item in phones:
+#                 if phone_number == item.phone:
+#                     delete_record = Record (name, item)
+#                     delete_record.delete_phone()
+#                     print (f'\nPhone number {item.phone} for {name.name} removed successfully!')
+#                     return main()
+#                 else:
+#                     print (f'Phone {phone_number} for {user_name} was not found!')
+#                     return main
+
+
+# @user_name_exists
+# def phone(user_name:str, phone_number: str):
+#     for name, phones in address_book.data.items():
+#         if name.name == user_name:
+#             phones_str = ''
+#             for item in phones:
+#                 phones_str += item.phone + ' '
+#             print (f'\nPhone number of {name.name} is: {phones_str}')
+#             return main()
+
 
 
 def exit_command(*args):
     return '\nGood bye! Have a nice day!\n'
 
 
-def unknown_command(*args):
-    pass
+# def unknown_command(*args):
+#     pass
 
 
 def show_all_command(*args):
@@ -84,7 +126,8 @@ def show_all_command(*args):
 
 COMMANDS = {
     add_command: ('add', 'append'),
-    change_command: ('change', 'зміни'),
+    phone_command: ('phone',),
+    delete_phone_command: ('delete',),
     exit_command: ('good bye', 'close', 'exit'),
     show_all_command: ('show all', )
 }
@@ -98,12 +141,13 @@ def parser(text:str):
                 data = text[len(kwd):].strip().split()
                 # print(data)
                 return cmd, data 
-    return unknown_command, []
+    return "Unknown command! Try againe!"
+    #return unknown_command, []
 
 
 def main():
 
-    table_of_commands()
+    #table_of_commands()
 
     while True:
         user_input = (input(f'\nEnter command, please!\n\n>>>')).strip()

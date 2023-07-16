@@ -30,15 +30,18 @@ class Record:
     def add_phone(self, phone: Phone):
         if phone.value not in [p.value for p in self.phones]:
             self.phones.append(phone)
-            return f"phone {phone} add to contact {self.name}"
-        return f"\nThe phone number {phone} for {self.name} is already adress book!"
+            return f"\nPhone number {phone} to contact {self.name} is added successfully!"
+        return f"\nThe phone number {phone} for {self.name} is already in adress book!"
     
-    def change_phone(self, old_phone, new_phone):
-        for idx, p in enumerate(self.phones):
-            if old_phone.value == p.value:
-                self.phones[idx] = new_phone
-                return f"old phone {old_phone} change to {new_phone}"
-        return f"{old_phone} not present in phones of contact {self.name}"
+    # def change_phone(self, old_phone, new_phone):
+    #     for idx, p in enumerate(self.phones):
+    #         if old_phone.value == p.value:
+    #             self.phones[idx] = new_phone
+    #             return f"old phone {old_phone} change to {new_phone}"
+    #     return f"{old_phone} not present in phones of contact {self.name}"
+
+    def delete_pone(phone_to_delete):
+        ...
     
     def __str__(self) -> str:
         return f"{self.name} {', '.join(str(p) for p in self.phones)}"
