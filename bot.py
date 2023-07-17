@@ -6,7 +6,6 @@ from ab_classes import AddressBook, Name, Phone, Record
 address_book = AddressBook()
 
 def table_of_commands():
-
     table = Table(title='\nALL VALID COMMANDS:\n(All entered data must be devided by gap!)')
     table.add_column('COMMAND', justify='left')
     table.add_column('NAME', justify='left')
@@ -21,7 +20,7 @@ def table_of_commands():
     table.add_row('good bye / close / exit', '-', '-', 'Exit')
     table.add_row('help', '-', '-', 'Printing table of commands')
 
-    return print (table)
+    return table
 
 
 def input_error(func):
@@ -45,15 +44,6 @@ def add_command(*args):
     return address_book.add_record(rec)
 
 
-# def change_command(*args):
-#     name = Name(args[0])
-#     old_phone = Phone(args[1])
-#     new_phone = Phone(args[2])
-#     rec: Record = address_book.get(str(name))
-#     if rec:
-#         return rec.change_phone(old_phone, new_phone)
-#     return f'No contact {name} in address book'
-
 def delete_phone_command(*args):
     name = Name(args[0])
     phone_to_delete = Phone (args[1])
@@ -71,38 +61,8 @@ def phone_command(*args):
     return f'\nContact {name} in address book is not found!'
 
 
-# def delete(user_name: str, phone_number:str):
-#     for name, phones in address_book.data.items():
-#         if name.name == user_name:
-#             for item in phones:
-#                 if phone_number == item.phone:
-#                     delete_record = Record (name, item)
-#                     delete_record.delete_phone()
-#                     print (f'\nPhone number {item.phone} for {name.name} removed successfully!')
-#                     return main()
-#                 else:
-#                     print (f'Phone {phone_number} for {user_name} was not found!')
-#                     return main
-
-
-# @user_name_exists
-# def phone(user_name:str, phone_number: str):
-#     for name, phones in address_book.data.items():
-#         if name.name == user_name:
-#             phones_str = ''
-#             for item in phones:
-#                 phones_str += item.phone + ' '
-#             print (f'\nPhone number of {name.name} is: {phones_str}')
-#             return main()
-
-
-
 def exit_command(*args):
     return '\nGood bye! Have a nice day!\n'
-
-
-# def unknown_command(*args):
-#     pass
 
 
 def show_all_command(*args):
@@ -124,25 +84,74 @@ def show_all_command(*args):
         table.add_row(user_name.value, phones_str.strip())
     return table
 
+def help_command(*args):
+    return table_of_commands()
+
+def hello_command(*args):
+    return '\nHow can I help you?'
+
+
 COMMANDS = {
     add_command: ('add', 'append'),
     phone_command: ('phone',),
     delete_phone_command: ('delete',),
     exit_command: ('good bye', 'close', 'exit'),
-    show_all_command: ('show all', )
+    show_all_command: ('show all',),
+    help_command: ('help',),
+    hello_command: ('hello',)
 }
 
+def check_phone_number(command, phone):
+    if command == 'phone':
+        return phone
+    if 18>= len(phone) >= 10:
+        for i in phone:
+            if i in ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '(', ')', ' '):
+                continue
+            else:
+                return (f'Phone number {phone} is not correct')
+      
+        return phone
+    else:
+        return (f'Phone number {phone} is not valid! It must be in range from 10 to 18 characters! Try againe!')
+
+
+
+def get_user_name(user_info: str )-> tuple:
+
+    regex_name = r'[a-zA-ZА-Яа-я]+'
+    user_input_split = user_info.strip().split()
+    name_list =[]
+    for i in user_input_split:
+        match_name = re.match(regex_name, i)
+        if match_name:
+            if len(match_name.group()) == len(i):
+                name_list.append(i.capitalize())
+                user_info = user_info[match_name.span()[1]:].strip()
+                phone = user_info
+            else:
+                return '\nName is not correct! Try again!'
+
+
+    if len(name_list)>=1:
+        name = ' '.join(name_list)
+    else:
+        name = ''
+        phone = ''
+
+    return name, phone
 
 def parser(text:str):
-    for cmd, kwds in COMMANDS.items():
+    for command, kwds in COMMANDS.items():
         for kwd in kwds:
             if text.lower().startswith(kwd):
-                # print(cmd)
-                data = text[len(kwd):].strip().split()
-                # print(data)
-                return cmd, data 
-    return "Unknown command! Try againe!"
-    #return unknown_command, []
+                user_info = text[len(kwd):].strip()
+                return command, user_info
+            
+    print ('\nUnknown command! Try againe!')
+    command = None
+    user_info = None
+    return command, user_info
 
 
 def main():
@@ -152,13 +161,15 @@ def main():
     while True:
         user_input = (input(f'\nEnter command, please!\n\n>>>')).strip()
         
-        cmd, data = parser(user_input)
+        command, user_info = parser(user_input)
+        if user_info or command:
+            name, phone = get_user_name(user_info)
+            phone = check_phone_number(command, phone)
+            data = (name, phone)
+            result = command(*data)
+            print(result)
         
-        result = cmd(*data)
-        
-        print(result)
-        
-        if cmd == exit_command:
+        if command == exit_command:
             break
 
 if __name__ == "__main__":

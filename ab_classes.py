@@ -40,8 +40,28 @@ class Record:
     #             return f"old phone {old_phone} change to {new_phone}"
     #     return f"{old_phone} not present in phones of contact {self.name}"
 
-    def delete_pone(phone_to_delete):
-        ...
+    def delete_pone(self, phone_to_delete):
+        for phone in self.phones:
+            if phone.value == phone_to_delete.value:
+                self.phones.remove(phone)
+                return f'\nPhone number {phone.value} for {self.name} removed successfully!'
+        return f"{phone_to_delete} is not in the phones list of the contact {self.name}"
+    
+        # phones_list = address_book.data[self.name]
+        # phones_list.remove(self.phone)
+        # address_book.data[self.name] = phones_list 
+#     for name, phones in address_book.data.items():
+#         if name.name == user_name:
+#             for item in phones:
+#                 if phone_number == item.phone:
+#                     delete_record = Record (name, item)
+#                     delete_record.delete_phone()
+#                     print (f'\nPhone number {item.phone} for {name.name} removed successfully!')
+#                     return main()
+#                 else:
+#                     print (f'Phone {phone_number} for {user_name} was not found!')
+#                     return main
+
     
     def __str__(self) -> str:
         return f"{self.name} {', '.join(str(p) for p in self.phones)}"
