@@ -131,7 +131,7 @@ def get_user_name(user_info: str )-> tuple:
     regex_name = r'[a-zA-ZА-Яа-я]+'
     user_input_split = user_info.strip().split()
     name_list =[]
-    
+
     for i in user_input_split:
         match_name = re.match(regex_name, i)
         if match_name:
