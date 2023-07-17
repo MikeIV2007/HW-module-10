@@ -166,7 +166,7 @@ def parser(text:str):
 
 def main():
 
-    table_of_commands()
+    print (table_of_commands())
 
     while True:
         user_input = (input(f'\nEnter command, please!\n\n>>>')).strip()
@@ -186,6 +186,9 @@ if __name__ == "__main__":
     main()
 
 # 
+# show all
+# help
+# phone
 # ADD Bill +380(67)333-43-54
 # Append Bill +380(67)333-11-11
 # phone Bill
